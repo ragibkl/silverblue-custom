@@ -19,12 +19,51 @@ modules:
 
   - type: dnf
     repos:
-      copr:
-        - atim/starship
+      # copr:
+      #   - atim/starship
+      files:
+        - https://download.docker.com/linux/fedora/docker-ce.repo
+      # keys:
+      #   - https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
     install:
       packages:
-        - micro
-        - starship
+        # - micro
+        # - starship
+
+        # Some GUI apps on host for better integration
+        - gnome-clocks
+        - gnome-tweaks
+        # - https://ftp.postgresql.org/pub/pgadmin/pgadmin4/yum/fedora/fedora-42-x86_64/pgadmin4-9.5-1.fc42.noarch.rpm
+        - nextcloud-client
+        - nextcloud-client-nautilus
+        - xournal
+
+        # Tilix as default terminal
+        - tilix
+        - tilix-nautilus
+
+        # Official docker-engine release
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - docker-buildx-plugin
+        - docker-compose-plugin
+
+        # HP printer and scanner drivers
+        - hplip
+        - sane-backends-drivers-scanners
+        - simple-scan
+
+        # Needed by headsetcontrol
+        - hidapi
+
+        # Needed by Docker-OSX
+        - libvirt
+        - qemu-kvm
+
+        # Logitech receiver
+        - solaar
+
     remove:
       packages:
         # example: removing firefox (in favor of the flatpak)
@@ -37,9 +76,32 @@ modules:
       - notify: true # Send notification after install/uninstall is finished (true/false)
         scope: system
         # If no repo information is specified, Flathub will be used by default
-        install: # system flatpaks we want all users to have and not remove
-          - org.mozilla.firefox
+        install:
+          - com.github.iwalton3.jellyfin-media-player
+          - com.google.Chrome
+          - com.mattjakeman.ExtensionManager
+          - com.visualstudio.code
+          - dev.zed.Zed
+          - org.gnome.Calculator
+          - org.gnome.Evince
           - org.gnome.Loupe
+          - org.gnome.Snapshot
+          - org.gnome.TextEditor
+          - org.libreoffice.LibreOffice
+          - org.mozilla.firefox
+          - org.videolan.VLC
+          - rest.insomnia.Insomnia
+        remove:
+          - org.gnome.Extensions
+          - org.gnome.Totem
       - scope: user # Also add Flathub user repo, but no user packages
+
+  - type: gnome-extensions
+    install:
+      - AppIndicator and KStatusNotifierItem Support
+      - Caffeine
+      - Docker
+      # - HeadsetControl
+      - Panel World Clock (Lite)
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
