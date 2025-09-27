@@ -1,0 +1,16 @@
+#!/bin/sh
+
+DISTROBOX_INI=/usr/share/distrobox/distrobox.ini
+
+# Create the home directories for each box
+. read_ini
+read_ini $DISTROBOX_INI
+for s in $INI__ALL_SECTIONS
+do
+    env_name="INI__${s}__home"
+    home_dir="${!env_name}"
+    mkdir -p $home_dir
+done
+
+# Create the boxes
+distrobox assemble create --replace --file $DISTROBOX_INI
