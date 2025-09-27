@@ -19,17 +19,10 @@ modules:
 
   - type: dnf
     repos:
-      # copr:
-      #   - atim/starship
       files:
         - https://download.docker.com/linux/fedora/docker-ce.repo
-      # keys:
-      #   - https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
     install:
       packages:
-        # - micro
-        # - starship
-
         # Some GUI apps on host for better integration
         - gnome-clocks
         - gnome-tweaks
