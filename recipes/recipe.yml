@@ -58,11 +58,11 @@ modules:
         - solaar
 
     remove:
-      packages:
+      packages: []
         # example: removing firefox (in favor of the flatpak)
         # "firefox" is the main package, "firefox-langpacks" is a dependency
-        - firefox
-        - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
+        # - firefox
+        # - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 
   - type: default-flatpaks
     configurations:
@@ -81,12 +81,12 @@ modules:
           - org.gnome.Snapshot
           - org.gnome.TextEditor
           - org.libreoffice.LibreOffice
-          - org.mozilla.firefox
           - org.videolan.VLC
           - rest.insomnia.Insomnia
         remove:
           - org.gnome.Extensions
           - org.gnome.Totem
+          - org.mozilla.firefox
       - scope: user # Also add Flathub user repo, but no user packages
 
   - type: gnome-extensions
