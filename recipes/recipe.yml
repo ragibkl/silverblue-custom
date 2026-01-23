@@ -79,12 +79,12 @@ modules:
 
   - type: copy
     from: headsetcontrol
-    src: /root/HeadsetControl/build/headsetcontrol
+    src: /HeadsetControl/build/headsetcontrol
     dest: /usr/bin/headsetcontrol
 
   - type: copy
     from: headsetcontrol
-    src: /root/HeadsetControl/build/70-headsets.rules
+    src: /HeadsetControl/build/70-headsets.rules
     dest: /lib/udev/rules.d/70-headsets.rules
 
   - type: default-flatpaks
