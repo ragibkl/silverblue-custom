@@ -48,7 +48,10 @@ modules:
         - simple-scan
 
         # Needed by headsetcontrol
+        - cmake
+        - g++
         - hidapi
+        - hidapi-devel
 
         # Needed by Docker-OSX
         - libvirt
@@ -56,6 +59,10 @@ modules:
 
         # Logitech receiver
         - solaar
+
+  - type: script
+    scripts:
+      - headsetcontrol.sh
 
   - type: default-flatpaks
     configurations:
