@@ -7,7 +7,23 @@ description: This is my personal OS image.
 
 # the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 43 # latest is also supported if you want new updates ASAP
+image-version: latest # latest is also supported if you want new updates ASAP
+
+stages:
+  - name: headsetcontrol
+    from: ghcr.io/ublue-os/silverblue-main:latest
+    modules:
+      - type: script
+        snippets:
+          - dnf group install -y "development-tools"
+          - dnf install -y cmake hidapi-devel g++
+          - cd /tmp
+          - git clone https://github.com/Sapd/HeadsetControl
+          - cd HeadsetControl
+          - mkdir build
+          - cd build
+          - cmake ..
+          - make
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
@@ -57,12 +73,15 @@ modules:
         # Logitech receiver
         - solaar
 
-    remove:
-      packages: []
-        # example: removing firefox (in favor of the flatpak)
-        # "firefox" is the main package, "firefox-langpacks" is a dependency
-        # - firefox
-        # - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
+  - type: copy
+    from: headsetcontrol
+    src: /tmp/HeadsetControl/build/headsetcontrol
+    dest: /usr/bin/headsetcontrol
+
+  - type: copy
+    from: headsetcontrol
+    src: /tmp/HeadsetControl/build/70-headsets.rules
+    dest: /lib/udev/rules.d/70-headsets.rules
 
   - type: default-flatpaks
     configurations:
