@@ -13,17 +13,22 @@ stages:
   - name: headsetcontrol
     from: ghcr.io/ublue-os/silverblue-main:latest
     modules:
+      - type: dnf
+        install:
+          packages:
+            - cmake
+            - hidapi-devel 
+            - g++
+        group-install:
+          with-optional: true
+          packages:
+            - development-tools
+
       - type: script
         snippets:
-          - dnf group install -y "development-tools"
-          - dnf install -y cmake hidapi-devel g++
-          - cd /tmp
-          - git clone https://github.com/Sapd/HeadsetControl
-          - cd HeadsetControl
-          - mkdir build
-          - cd build
-          - cmake ..
-          - make
+          - git clone https://github.com/Sapd/HeadsetControl && mkdir -p HeadsetControl/build 
+          - cd HeadsetControl && cmake .
+          - cd HeadsetControl/build && make
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
@@ -75,12 +80,12 @@ modules:
 
   - type: copy
     from: headsetcontrol
-    src: /tmp/HeadsetControl/build/headsetcontrol
+    src: /root/HeadsetControl/build/headsetcontrol
     dest: /usr/bin/headsetcontrol
 
   - type: copy
     from: headsetcontrol
-    src: /tmp/HeadsetControl/build/70-headsets.rules
+    src: /root/HeadsetControl/build/70-headsets.rules
     dest: /lib/udev/rules.d/70-headsets.rules
 
   - type: default-flatpaks
@@ -113,7 +118,7 @@ modules:
       - AppIndicator and KStatusNotifierItem Support
       - Caffeine
       - Docker
-      # - HeadsetControl
+      - HeadsetControl
       - Panel World Clock (Lite)
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
