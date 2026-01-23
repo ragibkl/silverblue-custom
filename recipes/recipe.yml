@@ -27,8 +27,7 @@ stages:
       - type: script
         snippets:
           - git clone https://github.com/Sapd/HeadsetControl && mkdir -p HeadsetControl/build 
-          - cd HeadsetControl && cmake .
-          - cd HeadsetControl/build && make
+          - cd HeadsetControl/build && cmake .. && make
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
