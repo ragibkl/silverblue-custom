@@ -9,26 +9,6 @@ description: This is my personal OS image.
 base-image: ghcr.io/ublue-os/silverblue-main
 image-version: latest # latest is also supported if you want new updates ASAP
 
-stages:
-  - name: headsetcontrol
-    from: ghcr.io/ublue-os/silverblue-main:latest
-    modules:
-      - type: dnf
-        install:
-          packages:
-            - cmake
-            - hidapi-devel 
-            - g++
-        group-install:
-          with-optional: true
-          packages:
-            - development-tools
-
-      - type: script
-        snippets:
-          - git clone https://github.com/Sapd/HeadsetControl && mkdir -p HeadsetControl/build 
-          - cd HeadsetControl/build && cmake .. && make
-
 # module configuration, executed in order
 # you can include multiple instances of the same module
 modules:
@@ -77,16 +57,6 @@ modules:
         # Logitech receiver
         - solaar
 
-  - type: copy
-    from: headsetcontrol
-    src: /HeadsetControl/build/headsetcontrol
-    dest: /usr/bin/headsetcontrol
-
-  - type: copy
-    from: headsetcontrol
-    src: /HeadsetControl/build/70-headsets.rules
-    dest: /lib/udev/rules.d/70-headsets.rules
-
   - type: default-flatpaks
     configurations:
       - notify: true # Send notification after install/uninstall is finished (true/false)
@@ -117,7 +87,6 @@ modules:
       - AppIndicator and KStatusNotifierItem Support
       - Caffeine
       - Docker
-      - HeadsetControl
       - Panel World Clock (Lite)
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
