@@ -1,4 +1,5 @@
 name: bluebuild
+
 on:
   schedule:
     - cron:
@@ -10,11 +11,21 @@ on:
 
   pull_request:
   workflow_dispatch: # allow manually triggering builds
+
 concurrency:
   # only run one build at a time
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
+
 jobs:
+  workflow-keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: liskin/gh-workflow-keepalive@v1
+
   bluebuild:
     name: Build Custom Image
     runs-on: ubuntu-latest
