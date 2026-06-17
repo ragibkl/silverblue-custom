@@ -1,21 +1,16 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-# image will be published to ghcr.io/<user>/<name>
 name: silverblue-custom
-# description will be included in the image's metadata
 description: This is my personal OS image.
 
-# the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/silverblue-main
-image-version: latest # latest is also supported if you want new updates ASAP
+image-version: latest
 
-# module configuration, executed in order
-# you can include multiple instances of the same module
 modules:
   - type: files
     files:
       - source: system
-        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
+        destination: /
 
   - type: dnf
     repos:
@@ -25,10 +20,9 @@ modules:
         - birkch/HeadsetControl
     install:
       packages:
-        # Some GUI apps on host for better integration
+        # GUI apps on host for better integration
         - gnome-clocks
         - gnome-tweaks
-        # - https://ftp.postgresql.org/pub/pgadmin/pgadmin4/yum/fedora/fedora-42-x86_64/pgadmin4-9.5-1.fc42.noarch.rpm
         - nextcloud-client
         - nextcloud-client-nautilus
         - xournal
@@ -49,48 +43,38 @@ modules:
         - sane-backends-drivers-scanners
         - simple-scan
 
-        # Needed by headsetcontrol
-        # - cmake
-        # - g++
-        # - hidapi
-        # - hidapi-devel
+        # Headset control (COPR: birkch/HeadsetControl)
         - HeadsetControl
-
-        # Needed by Docker-OSX
-        - libvirt
-        - qemu-kvm
 
         # Logitech receiver
         - solaar
 
-  # - type: script
-  #   scripts:
-  #     - headsetcontrol.sh
-
   - type: default-flatpaks
     configurations:
-      - notify: false # Send notification after install/uninstall is finished (true/false)
+      - notify: false
         scope: system
-        # If no repo information is specified, Flathub will be used by default
         install:
-          - com.github.iwalton3.jellyfin-media-player
           - com.google.Chrome
           - com.mattjakeman.ExtensionManager
           - com.visualstudio.code
-          - dev.zed.Zed
+          - dev.restfox.Restfox
+          - no.mifi.losslesscut
           - org.gnome.Calculator
           - org.gnome.Evince
           - org.gnome.Loupe
           - org.gnome.Snapshot
           - org.gnome.TextEditor
+          - org.jellyfin.JellyfinDesktop
           - org.libreoffice.LibreOffice
           - org.videolan.VLC
-          - rest.insomnia.Insomnia
         remove:
+          - com.github.iwalton3.jellyfin-media-player
+          - dev.zed.Zed
           - org.gnome.Extensions
           - org.gnome.Totem
           - org.mozilla.firefox
-      - scope: user # Also add Flathub user repo, but no user packages
+          - rest.insomnia.Insomnia
+      - scope: user
 
   - type: gnome-extensions
     install:
@@ -99,4 +83,4 @@ modules:
       - Docker
       - HeadsetControl
 
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
+  - type: signing
